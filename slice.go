@@ -23,7 +23,20 @@ func sliceExten() []int{
 	fmt.Println("s2 is :" , s2)
 	return s2
 }
+
+func appends () {
+	arr := [...]int {0, 1, 2, 3, 4, 5, 6, 7}
+	s1 := arr[:]
+	ss := append(s1, 10, 111, 123)
+	fmt.Println("ss is :", ss)
+	fmt.Println("arr is :", arr)
+
+}
+
+
 func main() {
+
+	appends()
 	fmt.Println("sliceExten return val is : " ,sliceExten())
 
 
