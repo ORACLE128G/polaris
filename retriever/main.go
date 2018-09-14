@@ -1,14 +1,17 @@
 package main
 
-import "polaris/retriever/mooc"
+import (
+	"fmt"
+	"polaris/retriever/mooc"
+)
 
 type Retriever interface {
 	Get(v string) string
 }
 
 func download (r Retriever) string {
-	return r.Get("mooc.com.cn")
+	return r.Get("https://github.com")
 }
 func main() {
-	download(mooc.Retriever{Contents:"Contents"})
+	fmt.Println(download(mooc.HttpRetriever{}))
 }
