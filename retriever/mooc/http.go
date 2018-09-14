@@ -17,6 +17,7 @@ func (r HttpRetriever) Get(v string) string {
 		panic("HTTP request failed.")
 	}
 	res, err := httputil.DumpResponse(resp, true)
+	resp.Body.Close()
 	if err != nil {
 		panic(err)
 	}
