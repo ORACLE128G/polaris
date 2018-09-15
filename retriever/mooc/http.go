@@ -11,7 +11,12 @@ type HttpRetriever struct {
 	Timeout   time.Duration
 }
 
-func (r HttpRetriever) Get(v string) string {
+func (r *HttpRetriever) Post(v map[string]string) string {
+	v["data"] = "Retriever faked."
+	return v["data"]
+}
+
+func (r *HttpRetriever) Get(v string) string {
 	resp, err := http.Get(v)
 	if err != nil {
 		panic("HTTP request failed.")
@@ -23,3 +28,4 @@ func (r HttpRetriever) Get(v string) string {
 	}
 	return string(res)
 }
+

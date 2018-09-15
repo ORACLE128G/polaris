@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	linkeds := queue.Linked{0, 1, 2,}
+	linkeds := queue.Linked{0, 1, 2, "asdsad", true}
 	empty := linkeds.IsEmpty()
 	fmt.Println("Linked length is :?", empty)
 	linkeds.Push(3)
