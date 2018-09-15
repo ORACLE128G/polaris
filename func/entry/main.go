@@ -1,11 +1,9 @@
 package main
 
-import (
-	"fmt"
-	"polaris/func"
-)
+import "polaris/func"
 
-func main() {
+// Adder Main func.
+/*func main() {
 	adder := _func.Adder()
 	for i := 0; i < 100; i++ {
 		fmt.Printf("0 + 1 + ...%d = %d \n", i, adder(i))
@@ -19,4 +17,10 @@ func main() {
 		fmt.Printf("0 + 1 + ...%d = %d \n", i, s)
 
 	}
+}*/
+
+func main () {
+
+	init := _func.AutoInit()
+	_func.Travers(init)
 }
