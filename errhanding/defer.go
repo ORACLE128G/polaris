@@ -12,20 +12,28 @@ func tryDefer() {
 	panic("Error occurred.")
 }
 
-func fibonacci() func() int{
+func fibonacci() func() int {
 	a, b := 0, 1
 	return func() int {
-		a, b = b, a + b
+		a, b = b, a+b
 		return a
 	}
 
 }
 
-func WriteFile (fileName string) {
-	file, e := os.Create(fileName)
-	if e != nil{
-		panic("Error occurred.")
+func WriteFile(fileName string) {
+	file, err := os.OpenFile(fileName, os.O_EXCL|os.O_CREATE, 0666)
+	if err != nil {
+		if pathError, ok := err.(*os.PathError); !ok {
+			panic(pathError)
+		} else {
+			fmt.Printf("%s %s %s \n",
+				pathError.Op,
+				pathError.Path,
+				pathError.Err)
+		}
 	}
+	// file, e := os.Create(fileName)
 	defer file.Close()
 	writer := bufio.NewWriter(file)
 	defer writer.Flush()
