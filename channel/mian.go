@@ -26,10 +26,15 @@ func worker(id int, ch chan int) {
 }
 func main() {
 	// TryChan()
-	ch := make(chan int)
 
-	go worker(1, ch)
-	ch <- 1
-	ch <- 2
+	var channels  [10]chan int
+	for i := 0; i < 10; i++ {
+		channels[i] = make(chan int)
+		go worker(i, channels[i])
+	}
+
+	for i := 0; i < 10; i++ {
+		channels[i] <- 'a' +i
+	}
 	time.Sleep(time.Minute)
 }
