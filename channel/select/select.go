@@ -13,7 +13,7 @@ func genChannel() chan int {
 		i := 0
 		for {
 			time.Sleep(time.Duration(
-				rand.Intn(1500)) * time.Millisecond)
+				rand.Intn(2)) * time.Second)
 			out <- i
 			i++
 		}
@@ -37,19 +37,21 @@ func main() {
 	var c1, c2 = genChannel(), genChannel()
 	w := createWorker(0)
 	n := 0
-	hasV := false
+	var queue  [] int
 	for {
 		var actCh chan<- int
-		if hasV {
+		var actV int
+		if len(queue) > 0 {
 			actCh = w
+			actV = queue[0]
 		}
 		select {
 		case n = <-c1:
-			hasV = true
+			queue = append(queue, n)
 		case n = <-c2:
-			hasV = true
-		case actCh <- n:
-			hasV = false
+			queue = append(queue, n)
+		case actCh <- actV:
+			queue = queue[1:]
 		}
 	}
 }
