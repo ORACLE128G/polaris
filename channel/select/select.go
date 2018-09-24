@@ -13,7 +13,7 @@ func genChannel() chan int {
 		i := 0
 		for {
 			time.Sleep(time.Duration(
-				rand.Intn(2)) * time.Second)
+				rand.Intn(3)) * time.Second)
 			out <- i
 			i++
 		}
@@ -28,7 +28,6 @@ func worker(id int, c chan int) {
 }
 
 func createWorker(id int) chan<- int {
-
 	c := make(chan int)
 	go worker(id, c)
 	return c
@@ -53,6 +52,8 @@ func main() {
 			queue = append(queue, n)
 		case actCh <- actV:
 			queue = queue[1:]
+		case <- time.After(800 * time.Millisecond):
+			fmt.Println("Timeout.")
 		case <- t:
 			fmt.Println("Bye.")
 			return
