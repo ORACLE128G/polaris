@@ -30,7 +30,7 @@ func (nodes *Nodes) TraverseFunc(f func(*Nodes)) {
 		return
 	}
 	nodes.Left.TraverseFunc(f)
-	nodes.print()
+	f(nodes)
 	nodes.Right.TraverseFunc(f)
 }
 
@@ -52,6 +52,7 @@ func main() {
 	maxNode := 0
 	c := nodes.traverseWithChannel()
 	for node := range c {
+		fmt.Println(node)
 		if node.V > maxNode {
 			maxNode = node.V
 		}
