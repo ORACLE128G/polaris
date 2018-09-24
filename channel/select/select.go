@@ -38,6 +38,7 @@ func main() {
 	w := createWorker(0)
 	n := 0
 	var queue  [] int
+	t := time.After(10 * time.Second)
 	for {
 		var actCh chan<- int
 		var actV int
@@ -52,6 +53,9 @@ func main() {
 			queue = append(queue, n)
 		case actCh <- actV:
 			queue = queue[1:]
+		case <- t:
+			fmt.Println("Bye.")
+			return
 		}
 	}
 }
