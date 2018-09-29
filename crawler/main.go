@@ -11,6 +11,7 @@ import (
 	"net/http"
 )
 
+// Determine Charset from r
 func determineCharset(r io.Reader) encoding.Encoding {
 	bytes, err := bufio.NewReader(r).Peek(1024)
 	if err != nil {
@@ -29,7 +30,7 @@ func main() {
 
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		fmt.Printf("Response code is %d", resp.StatusCode)
+		fmt.Printf("Error code: %d", resp.StatusCode)
 		return
 	}
 	e := determineCharset(resp.Body)
