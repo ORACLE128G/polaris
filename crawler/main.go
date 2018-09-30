@@ -9,6 +9,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 )
 
 // Determine Charset from r
@@ -20,6 +21,17 @@ func determineCharset(r io.Reader) encoding.Encoding {
 
 	e, _, _ := charset.DetermineEncoding(bytes, "")
 	return e
+}
+
+// Matching all available city.
+func cityList(b [] byte) {
+	//reg := "(http://www.zhenai.com/zhenghun/[0-9a-z]+)([^<]+)"
+	reg := `<a href="(http://www.zhenai.com/zhenghun/[0-9a-z]+)"[^>]*>([^<]+)</a>`
+	c := regexp.MustCompile(reg)
+	matches := c.FindAllSubmatch(b, -1)
+	for _, m := range matches {
+		fmt.Printf("City: %s, URL: %s \n",m[2],m[1])
+	}
 }
 func main() {
 
@@ -39,5 +51,5 @@ func main() {
 	if err != nil {
 		panic(body)
 	}
-	fmt.Printf("%s \n ", body)
+	cityList(body)
 }
