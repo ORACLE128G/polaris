@@ -7,7 +7,6 @@ import (
 	"golang.org/x/text/encoding"
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
-	"io"
 	"io/ioutil"
 	"net/http"
 )
@@ -18,19 +17,21 @@ func Fetch(url string) ([] byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	bodyContents := resp.Body
+	defer bodyContents.Close()
 	if resp.StatusCode != http.StatusOK {
 
 		return nil, fmt.Errorf("wrong status code: %d", resp.StatusCode)
 	}
-	e := determineCharset(resp.Body)
+	bodyReader := bufio.NewReader(bodyContents)
+	e := determineCharset(bodyReader)
 
-	return ioutil.ReadAll(transform.NewReader(resp.Body, e.NewDecoder()))
+	return ioutil.ReadAll(transform.NewReader(bodyReader, e.NewDecoder()))
 }
 
 // Determine Charset from r
-func determineCharset(r io.Reader) encoding.Encoding {
-	bytes, err := bufio.NewReader(r).Peek(1024)
+func determineCharset(r *bufio.Reader) encoding.Encoding {
+	bytes, err := r.Peek(1024)
 	if err != nil {
 		return unicode.UTF8
 	}
