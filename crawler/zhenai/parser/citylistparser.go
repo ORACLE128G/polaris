@@ -9,8 +9,7 @@ const cityListRe = `<a href="(http://www.zhenai.com/zhenghun/[0-9a-z]+)"[^>]*>([
 
 func ParseCityList(contents [] byte) engine.ParseResult {
 	//reg := "(http://www.zhenai.com/zhenghun/[0-9a-z]+)([^<]+)"
-	reg := cityListRe
-	c := regexp.MustCompile(reg)
+	c := regexp.MustCompile(cityListRe)
 	matches := c.FindAllSubmatch(contents, -1)
 
 	result := engine.ParseResult{}
