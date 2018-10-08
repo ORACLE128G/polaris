@@ -11,14 +11,7 @@ func Run(seeds ...Request) {
 		requests = append(requests, r)
 	}
 
-	bk := 0
 	for len(requests) > 0 {
-
-		// Fetch 10 cities from requests.
-		if bk == 10 {
-			break
-		}
-		bk++
 		// Get head requests
 		r := requests[0]
 		requests = requests[1:]
@@ -33,7 +26,7 @@ func Run(seeds ...Request) {
 		requests = append(requests, parseResult.Requests...)
 
 		for _, i := range parseResult.Items {
-			log.Printf("Got item %s", i)
+			log.Printf("Got item %v", i)
 		}
 
 	}
