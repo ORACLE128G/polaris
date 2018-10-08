@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-var nameExp = regexp.MustCompile(`<a class="name fs24">([^<]+)</a>`)
+//var nameExp = regexp.MustCompile(`<a class="name fs24">([^<]+)</a>`)
 var genderExp = regexp.MustCompile(`<td><span class="label">性别：</span><span field="">([^<]+)</span></td>`)
 var ageExp = regexp.MustCompile(`<td><span class="label">年龄：</span>([\d]+)岁</td>`)
 var heightExp = regexp.MustCompile(`<td><span class="label">身高：</span>169CM</td>`)
@@ -22,10 +22,10 @@ var houseExp = regexp.MustCompile(`<td><span class="label">住房条件：</span
 var carExp = regexp.MustCompile(`<td><span class="label">是否购车：</span><span field="">([^<]+)</span></td>`)
 
 func ParseProfile(
-	contents [] byte) engine.ParseResult {
+	contents [] byte, name string) engine.ParseResult {
 
 	profile := model.Profile{}
-	profile.Name = extractString(contents, nameExp)
+	profile.Name = name
 	profile.Gender = extractString(contents, genderExp)
 	profile.Income = extractString(contents, inComeExp)
 	profile.Marriage = extractString(contents, marriageExp)
