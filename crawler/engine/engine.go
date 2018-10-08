@@ -11,7 +11,14 @@ func Run(seeds ...Request) {
 		requests = append(requests, r)
 	}
 
+	bk := 0
 	for len(requests) > 0 {
+
+		// Fetch 10 cities from requests.
+		if bk == 10 {
+			break
+		}
+		bk++
 		// Get head requests
 		r := requests[0]
 		requests = requests[1:]
