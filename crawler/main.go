@@ -8,7 +8,7 @@ import (
 const seed  = "http://www.zhenai.com/zhenghun"
 func main() {
 
-	engine.Run(engine.Request{
+	engine.SimpleEngine{}.Run(engine.Request{
 		Url: seed,
 		ParserFunc:parser.ParseCityList,
 	})
