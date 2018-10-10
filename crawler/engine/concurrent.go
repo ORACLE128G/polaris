@@ -18,6 +18,7 @@ type Scheduler interface {
 
 func (e *ConcurrentEngine) Run(seeds ...Request) {
 	out := make(chan ParseResult)
+	// Create two queues waiting for the task to arrive.
 	e.Scheduler.Run()
 	for i := 0; i < e.WorkerCount; i++ {
 		createWorker(out, e.Scheduler)

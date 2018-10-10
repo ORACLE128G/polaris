@@ -6,28 +6,29 @@ import (
 
 type QueuedScheduler struct {
 	requestChan chan engine.Request
-	workChan    chan chan engine.Request
+	workerChan  chan chan engine.Request
 }
 
-func (q *QueuedScheduler) Submit(r engine.Request) {
-	q.requestChan <- r
+func (s *QueuedScheduler) Submit(r engine.Request) {
+	s.requestChan <- r
 }
-func (q *QueuedScheduler) WorkerReady(w chan engine.Request) {
-	q.workChan <- w
+func (s *QueuedScheduler) WorkerReady(w chan engine.Request) {
+	s.workerChan <- w
 }
 
-func (q *QueuedScheduler) ConfigureMasterWorkerChan(r chan engine.Request) {
+func (s *QueuedScheduler) ConfigureMasterWorkerChan(r chan engine.Request) {
 	panic("implement me")
 }
 
-func (q *QueuedScheduler) Run() {
-	q.workChan = make(chan chan engine.Request)
-	q.requestChan = make(chan engine.Request)
+func (s *QueuedScheduler) Run() {
+	s.workerChan = make(chan chan engine.Request)
+	s.requestChan = make(chan engine.Request)
 	go func() {
+		// Declare a queue of request.
+		var requestQueue [] engine.Request
+		// Declare a queue of worker.
+		var workerQueue [] chan engine.Request
 		for {
-			var requestQueue [] engine.Request
-			var workerQueue [] chan engine.Request
-
 			var activeRequest engine.Request
 			var activeWorker chan engine.Request
 
@@ -36,9 +37,9 @@ func (q *QueuedScheduler) Run() {
 				activeWorker = workerQueue[0]
 			}
 			select {
-			case r := <-q.requestChan:
+			case r := <-s.requestChan:
 				requestQueue = append(requestQueue, r)
-			case w := <-q.workChan:
+			case w := <-s.workerChan:
 				workerQueue = append(workerQueue, w)
 			case activeWorker <- activeRequest:
 				workerQueue = workerQueue[1:]
