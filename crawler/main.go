@@ -2,6 +2,7 @@ package main
 
 import (
 	"polaris/crawler/engine"
+	"polaris/crawler/persist"
 	"polaris/crawler/scheduler"
 	"polaris/crawler/zhenai/parser"
 )
@@ -14,6 +15,7 @@ func main() {
 	e := engine.ConcurrentEngine{
 		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 100,
+		ItemChan:    persist.ItemSaver(),
 	}
 
 	//e.Run(engine.Request{
@@ -21,7 +23,7 @@ func main() {
 	//	ParserFunc: parser.ParseCityList,
 	//})
 	e.Run(engine.Request{
-		Url: shanghai,
+		Url:        shanghai,
 		ParserFunc: parser.ParseCity,
 	})
 }
