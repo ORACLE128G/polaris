@@ -7,6 +7,7 @@ import (
 )
 
 const seed = "http://www.zhenai.com/zhenghun"
+const shanghai = "http://www.zhenai.com/zhenghun/shanghai"
 
 func main() {
 
@@ -15,8 +16,12 @@ func main() {
 		WorkerCount: 100,
 	}
 
+	//e.Run(engine.Request{
+	//	Url:        seed,
+	//	ParserFunc: parser.ParseCityList,
+	//})
 	e.Run(engine.Request{
-		Url:        seed,
-		ParserFunc: parser.ParseCityList,
+		Url: shanghai,
+		ParserFunc: parser.ParseCity,
 	})
 }
