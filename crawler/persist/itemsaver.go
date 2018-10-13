@@ -1,6 +1,10 @@
 package persist
 
-import "log"
+import (
+	"context"
+	"github.com/olivere/elastic"
+	"log"
+)
 
 func ItemSaver() chan interface{} {
 	out := make(chan interface{})
@@ -13,4 +17,19 @@ func ItemSaver() chan interface{} {
 		}
 	}()
 	return out
+}
+
+// Saving all items.
+func save(item interface{}) (id string, err error) {
+	client, err := elastic.NewClient(
+		elastic.SetSniff(false))
+	if err != nil {
+		return "", err
+	}
+	response, err := client.Index().Index("polaris").Type("zhenai").
+		BodyJson(item).Do(context.Background())
+	if err != nil {
+		return "", err
+	}
+	return response.Id, nil
 }
