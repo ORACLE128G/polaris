@@ -2,19 +2,21 @@ package persist
 
 import (
 	"context"
+	"errors"
 	"github.com/olivere/elastic"
 	"log"
+	"polaris/crawler/engine"
 )
 
-func ItemSaver() chan interface{} {
-	out := make(chan interface{})
+func ItemSaver() chan engine.Item {
+	out := make(chan engine.Item)
 	go func() {
 		itemCount := 0
 		for {
 			item := <-out
 			log.Printf("Item Saver: Got item #%d: %v", itemCount, item)
 			itemCount++
-			_, err := save(item)
+			err := save(item)
 			if err != nil {
 				log.Printf("Item Saver: an error occured, item: %v, err: %v",
 					item, err)
@@ -24,17 +26,24 @@ func ItemSaver() chan interface{} {
 	return out
 }
 
+var client, _ = elastic.NewClient(
+	elastic.SetSniff(false))
 // Saving all items.
-func save(item interface{}) (id string, err error) {
-	client, err := elastic.NewClient(
-		elastic.SetSniff(false))
+func save(item engine.Item) (err error) {
 	if err != nil {
-		return "", err
+		return err
 	}
-	response, err := client.Index().Index("polaris").Type("zhenai").
-		BodyJson(item).Do(context.Background())
+	if item.Type == "" {
+		return errors.New("type must not be null")
+	}
+	indexService := client.Index().Index("polaris").Type(item.Type).
+		BodyJson(item)
+	if item.Id != "" {
+		indexService.Id(item.Id)
+	}
+	_, err = indexService.Do(context.Background())
 	if err != nil {
-		return "", err
+		return err
 	}
-	return response.Id, nil
+	return nil
 }
