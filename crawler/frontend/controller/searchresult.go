@@ -8,6 +8,7 @@ import (
 	"polaris/crawler/frontend/model"
 	"polaris/crawler/frontend/view"
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -35,14 +36,21 @@ func (h SearchResultHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 }
 func (h SearchResultHandler) getSearchResult(s string, i int) (model.SearchResult, error) {
 	var result model.SearchResult
+	// fill in query string
+	result.Query = s
 	resp, err := h.client.Search("polaris").
-		Query(elastic.NewQueryStringQuery(s)).From(i).Do(context.Background())
+		Query(elastic.NewQueryStringQuery(
+		rewriteQueryString(s))).From(i).Do(context.Background())
 	if err != nil {
 		return result, err
 	}
 	result.Hits = resp.TotalHits()
 	result.Start = i
 	result.Items = resp.Each(reflect.TypeOf(engine.Item{}))
+	// Prev page
+	result.PrevFrom = result.Start - len(result.Items)
+	// Next page
+	result.NextFrom = result.Start + len(result.Items)
 	return result, nil
 }
 
@@ -56,4 +64,10 @@ func CreateSearchResultHandler(template string) SearchResultHandler {
 		view:   view.CreateSearchResultView(template),
 		client: client,
 	}
+}
+
+var qRegExp = regexp.MustCompile(`([A-Z][a-z]*):`)
+
+func rewriteQueryString(q string) string {
+	return qRegExp.ReplaceAllString(q, "PayLoad.$1:")
 }
