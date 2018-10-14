@@ -1,5 +1,7 @@
 package engine
 
+import "polaris/crawler/model"
+
 type Request struct {
 	Url        string
 	ParserFunc func([] byte) ParseResult
@@ -14,7 +16,7 @@ type Item struct {
 	Url     string
 	Id      string
 	Type    string
-	PayLoad interface{}
+	PayLoad model.Profile
 }
 
 func NilParser([]byte) ParseResult {
