@@ -32,7 +32,7 @@ func TestSave(t *testing.T) {
 	}
 
 	// Save expected item.
-	err := save(expected)
+	err := Save(expected, "polaris")
 
 	if err != nil {
 		panic(err)

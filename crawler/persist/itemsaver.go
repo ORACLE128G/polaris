@@ -16,7 +16,7 @@ func ItemSaver() chan engine.Item {
 			item := <-out
 			log.Printf("Item Saver: Got item #%d: %v", itemCount, item)
 			itemCount++
-			err := save(item)
+			err := Save(item, index)
 			if err != nil {
 				log.Printf("Item Saver: an error occured, item: %v, err: %v",
 					item, err)
@@ -28,15 +28,16 @@ func ItemSaver() chan engine.Item {
 
 var client, _ = elastic.NewClient(
 	elastic.SetSniff(false))
+var index = "polaris"
 // Saving all items.
-func save(item engine.Item) (err error) {
+func Save(item engine.Item, index string) (err error) {
 	if err != nil {
 		return err
 	}
 	if item.Type == "" {
 		return errors.New("type must not be null")
 	}
-	indexService := client.Index().Index("polaris").Type(item.Type).
+	indexService := client.Index().Index(index).Type(item.Type).
 		BodyJson(item)
 	if item.Id != "" {
 		indexService.Id(item.Id)
