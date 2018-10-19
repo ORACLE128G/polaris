@@ -18,12 +18,16 @@ func main() {
 		ItemChan:    persist.ItemSaver(),
 	}
 
-	//e.Run(engine.Request{
-	//	Url:        seed,
-	//	ParserFunc: parser.ParseCityList,
-	//})
 	e.Run(engine.Request{
-		Url:        shanghai,
-		ParserFunc: parser.ParseCity,
+		Url: seed,
+		Parser: engine.NewFuncParser(
+			parser.ParseCityList,
+			"ParseCityList"),
 	})
+	/*e.Run(engine.Request{
+		Url: shanghai,
+		Parser: engine.NewFuncParser(
+			parser.ParseCity,
+			"ParseCity"),
+	})*/
 }

@@ -22,7 +22,7 @@ var houseExp = regexp.MustCompile(`<td><span class="label">住房条件：</span
 var carExp = regexp.MustCompile(`<td><span class="label">是否购车：</span><span field="">([^<]+)</span></td>`)
 var idExp = regexp.MustCompile(`http://album.zhenai.com/u/([\d]+)`)
 
-func ParseProfile(
+func parseProfile(
 	contents [] byte, name string,
 	url string) engine.ParseResult {
 
@@ -67,4 +67,24 @@ func extractString(contents [] byte, reg *regexp.Regexp) string {
 		return string(match[1])
 	}
 	return ""
+}
+
+type ProfileParser struct {
+	userName string
+}
+
+func (p *ProfileParser) Parse(contents []byte, url string) engine.ParseResult {
+	return parseProfile(
+		contents, url, p.userName)
+}
+
+func (p *ProfileParser) Serialize() (name string, args interface{}) {
+	return "ProfileParser", p.userName
+}
+
+func NewProfileParser(name string) *ProfileParser {
+	return &ProfileParser{
+		userName: name,
+	}
+
 }
