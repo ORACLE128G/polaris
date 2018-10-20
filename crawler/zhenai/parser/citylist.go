@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"polaris/crawler-distributed/config"
 	"polaris/crawler/engine"
 	"regexp"
 )
@@ -16,7 +17,7 @@ func ParseCityList(contents []byte, _ string) engine.ParseResult {
 		result.Requests = append(result.Requests, engine.Request{
 			Url: string(m[1]),
 			Parser: engine.NewFuncParser(
-				ParseCity, "ParseCity"),
+				ParseCity, config.ParseCity),
 		})
 	}
 	return result

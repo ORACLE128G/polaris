@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"polaris/crawler-distributed/config"
 	"polaris/crawler/engine"
 	"regexp"
 )
@@ -18,17 +19,17 @@ func ParseCity(contents []byte, _ string) engine.ParseResult {
 		url := string(m[1])
 		name := string(m[2])
 		result.Requests = append(result.Requests, engine.Request{
-			Url: url,
+			Url:    url,
 			Parser: NewProfileParser(name),
 		})
 	}
 	match = cityUrlRe.FindAllSubmatch(contents, -1)
 	for _, m := range match {
 		result.Requests = append(result.Requests, engine.Request{
-			Url:    string(m[1]),
+			Url: string(m[1]),
 			Parser: engine.NewFuncParser(
 				ParseCity,
-				"ParseCity"),
+				config.ParseCity),
 		})
 	}
 
