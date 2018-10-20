@@ -1,6 +1,7 @@
 package main
 
 import (
+	"polaris/crawler-distributed/config"
 	"polaris/crawler-distributed/rpc"
 	"polaris/crawler/engine"
 	"polaris/crawler/model"
@@ -10,14 +11,12 @@ import (
 
 func TestItemSaver(t *testing.T) {
 
-	const host = ":8080"
-
 	// start ItemSaverServer
-	go serveRpc(host, "polaris")
+	go serveRpc(config.ItemSaver0Host, "polaris")
 
 	// start ItemSaverClient
 	time.Sleep(time.Second)
-	client, err := rpcsupport.NewClient(host)
+	client, err := rpcsupport.NewClient(config.ItemSaver0Host)
 	if err != nil {
 		panic(err)
 	}

@@ -10,13 +10,12 @@ import (
 )
 
 func TestCrawlService(t *testing.T) {
-	const host = ":8080"
 	go rpcsupport.ServeRpc(
-		host, worker.CrawlService{})
+		config.Worker0Host, worker.CrawlService{})
 	time.Sleep(time.Second)
 
 	client, err := rpcsupport.NewClient(
-		host)
+		config.Worker0Host)
 	if err != nil {
 		panic(err)
 	}

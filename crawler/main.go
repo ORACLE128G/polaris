@@ -13,9 +13,10 @@ const shanghai = "http://www.zhenai.com/zhenghun/shanghai"
 func main() {
 
 	e := engine.ConcurrentEngine{
-		Scheduler:   &scheduler.QueuedScheduler{},
-		WorkerCount: 100,
-		ItemChan:    persist.ItemSaver(),
+		Scheduler:        &scheduler.QueuedScheduler{},
+		WorkerCount:      100,
+		ItemChan:         persist.ItemSaver(),
+		RequestProcessor: engine.Worker,
 	}
 
 	/*e.Run(engine.Request{
