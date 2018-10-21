@@ -1,7 +1,9 @@
 package main
 
 import (
-	"polaris/crawler-distributed/config"
+	"flag"
+	"fmt"
+	"log"
 	"polaris/crawler-distributed/persist"
 	"polaris/crawler-distributed/rpc"
 )
@@ -13,6 +15,14 @@ func serveRpc(host, index string) error {
 		})
 }
 
+var port = flag.Int("port", 0,
+	"The port for me to listen on")
+
 func main() {
-	serveRpc(config.ItemSaver0Host, "polaris")
+	flag.Parse()
+	if *port == 0 {
+		log.Printf("Must specify a port ")
+		return
+	}
+	serveRpc(fmt.Sprintf(":%d", *port), "polaris")
 }

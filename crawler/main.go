@@ -1,6 +1,7 @@
 package main
 
 import (
+	"polaris/crawler-distributed/config"
 	"polaris/crawler/engine"
 	"polaris/crawler/persist"
 	"polaris/crawler/scheduler"
@@ -19,16 +20,16 @@ func main() {
 		RequestProcessor: engine.Worker,
 	}
 
-	/*e.Run(engine.Request{
+	e.Run(engine.Request{
 		Url: seed,
 		Parser: engine.NewFuncParser(
 			parser.ParseCityList,
 			config.ParseCityList),
-	})*/
-	e.Run(engine.Request{
+	})
+	/*e.Run(engine.Request{
 		Url: shanghai,
 		Parser: engine.NewFuncParser(
 			parser.ParseCity,
 			"ParseCity"),
-	})
+	})*/
 }
