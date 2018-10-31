@@ -8,6 +8,7 @@ import (
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"time"
 )
@@ -36,6 +37,7 @@ func Fetch(url string) ([] byte, error) {
 	}
 	resp, err := http.Get(url)*/
 	if err != nil {
+		log.Printf("error: request failed: %v", err)
 		return nil, err
 	}
 	bodyContents := resp.Body
