@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"log"
 	"polaris/crawler-distributed/config"
 	itemsaver "polaris/crawler-distributed/persist/client"
 	"polaris/crawler-distributed/pool"
@@ -24,6 +25,27 @@ func main() {
 	// run itemsaver.go first
 	// then to run worker.go
 	flag.Parse()
+
+	if *itemSaverHost == "" && *workerHosts == "" {
+		log.Println("Must specify one or more itemsaver host, like this:\n" +
+			"go run main.go --itemsaver_host=\":9200\"")
+		log.Println("Must specify one or more worker host, like this:\n" +
+			"go run main.go --worker_host=\"9300\"")
+		log.Print("You can typing the go run main.go --help for get help")
+		return
+	}
+	if *itemSaverHost == "" {
+		log.Print("Must specify one or more itemsaver host, like this:\n" +
+			"go run main.go --itemsaver_host=\":9200\"")
+		return
+	}
+
+	if *workerHosts == "" {
+		log.Print("Must specify one or more worker host, like this:\n" +
+			"go run main.go --worker_host=\"9300\"")
+		return
+	}
+
 	itemChan, err := itemsaver.ItemSaver(*itemSaverHost)
 	if err != nil {
 		panic(err)

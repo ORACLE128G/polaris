@@ -26,6 +26,10 @@ func main() {
 			parser.ParseCityList,
 			config.ParseCityList),
 	})
+
+
+	// unblock the following code, we can got zhenai.com user details.
+
 	/*e.Run(engine.Request{
 		Url: shanghai,
 		Parser: engine.NewFuncParser(
