@@ -1,8 +1,8 @@
 # Polaris 
 
-- ## Crawl more sites
+- ## ~~Crawl more sites~~
 
-- ## Robots Protocol
+- ## ~~Robots Protocol~~
 
 - ## Simulated login
 
