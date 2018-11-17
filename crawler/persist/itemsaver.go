@@ -4,7 +4,9 @@ import (
 	"context"
 	"errors"
 	"github.com/olivere/elastic"
+	"github.com/olivere/elastic/config"
 	"log"
+	cfg "polaris/crawler-distributed/config"
 	"polaris/crawler/engine"
 )
 
@@ -26,11 +28,15 @@ func ItemSaver() chan engine.Item {
 	return out
 }
 
+var sniff = false
+var client, err = elastic.NewClientFromConfig(&config.Config{
+	Sniff: &sniff,
+	URL:   cfg.ElasticsearchHosts,
+})
 
 // Saving all items.
 func Save(item engine.Item, index string) (error) {
-	client, err := elastic.NewClient(
-		elastic.SetSniff(false))
+
 	if err != nil {
 		return err
 	}
