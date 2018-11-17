@@ -84,9 +84,9 @@ func entry(c *[]byte, reg *regexp.Regexp) []string {
 func suggestGender(c *[]byte) string{
 	s := string(*c)
 	if strings.Contains(s, "她的动态") {
-		return "男"
-	} else {
 		return "女"
+	} else {
+		return "男"
 	}
 }
 
