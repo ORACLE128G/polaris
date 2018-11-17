@@ -27,4 +27,6 @@ const (
 	// ItemSaverService.Save
 
 	ItemSaverServiceSave = "ItemSaverService.Save"
+
+	ElasticsearchHosts = "http://192.168.1.9:9200"
 )
