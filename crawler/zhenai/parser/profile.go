@@ -6,10 +6,11 @@ import (
 	"polaris/crawler/model"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 //var nameExp = regexp.MustCompile(`<a class="name fs24">([^<]+)</a>`)
-var genderExp = regexp.MustCompile(`<td><span class="label">性别：</span><span field="">([^<]+)</span></td>`)
+var entryExp = regexp.MustCompile(`<div class="m-btn purple" data-v-([0-9a-z]+)>([^<]+)</div>`)
 var ageExp = regexp.MustCompile(`<td><span class="label">年龄：</span>([\d]+)岁</td>`)
 var heightExp = regexp.MustCompile(`<td><span class="label">身高：</span>169CM</td>`)
 var weightExp = regexp.MustCompile(`<td><span class="label">体重：</span><span field="">([^<]+)</span></td>`)
@@ -29,7 +30,7 @@ func parseProfile(
 
 	profile := model.Profile{}
 	profile.Name = name
-	profile.Gender = extractString(contents, genderExp)
+	profile.Gender = suggestGender(&contents)
 	profile.Income = extractString(contents, inComeExp)
 	profile.Marriage = extractString(contents, marriageExp)
 	profile.Education = extractString(contents, educationExp)
@@ -38,6 +39,7 @@ func parseProfile(
 	profile.Xinzuo = extractString(contents, xinZuoExp)
 	profile.House = extractString(contents, houseExp)
 	profile.Car = extractString(contents, carExp)
+	profile.Entry =entry(&contents, entryExp)
 	if age, err := strconv.Atoi(extractString(contents, ageExp)); err == nil {
 		profile.Age = age
 	}
@@ -70,13 +72,31 @@ func extractString(contents [] byte, reg *regexp.Regexp) string {
 	return ""
 }
 
+func entry(c *[]byte, reg *regexp.Regexp) []string {
+	match := reg.FindAllSubmatch(*c, -1)
+	var r []string
+	for _, e := range match {
+		r = append(r, string(e[2]))
+	}
+	return r
+}
+
+func suggestGender(c *[]byte) string{
+	s := string(*c)
+	if strings.Contains(s, "她的动态") {
+		return "男"
+	} else {
+		return "女"
+	}
+}
+
 type ProfileParser struct {
 	userName string
 }
 
 func (p *ProfileParser) Parse(contents []byte, url string) engine.ParseResult {
 	return parseProfile(
-		contents, url, p.userName)
+		contents, p.userName, url)
 }
 
 func (p *ProfileParser) Serialize() (name string, args interface{}) {
