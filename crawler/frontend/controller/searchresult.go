@@ -3,7 +3,9 @@ package controller
 import (
 	"context"
 	"github.com/olivere/elastic"
+	"github.com/olivere/elastic/config"
 	"net/http"
+	cfg "polaris/crawler-distributed/config"
 	"polaris/crawler/engine"
 	"polaris/crawler/frontend/model"
 	"polaris/crawler/frontend/view"
@@ -38,9 +40,10 @@ func (h SearchResultHandler) getSearchResult(s string, i int) (model.SearchResul
 	var result model.SearchResult
 	// fill in query string
 	result.Query = s
-	resp, err := h.client.Search("polaris").
+	// set index for search.
+	resp, err := h.client.Search("").
 		Query(elastic.NewQueryStringQuery(
-		rewriteQueryString(s))).From(i).Do(context.Background())
+			rewriteQueryString(s))).From(i).Do(context.Background())
 	if err != nil {
 		return result, err
 	}
@@ -54,7 +57,11 @@ func (h SearchResultHandler) getSearchResult(s string, i int) (model.SearchResul
 	return result, nil
 }
 
-var client, err = elastic.NewClient(elastic.SetSniff(false))
+var sniff = false
+var client, err = elastic.NewClientFromConfig(&config.Config{
+	Sniff: &sniff,
+	URL:   cfg.ElasticsearchHosts,
+})
 
 func CreateSearchResultHandler(template string) SearchResultHandler {
 	if err != nil {

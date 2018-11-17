@@ -16,6 +16,7 @@ type Profile struct {
 	Xinzuo     string
 	House      string
 	Car        string
+	Entry      []string
 }
 
 func FromJson(i interface{}) (Profile, error) {

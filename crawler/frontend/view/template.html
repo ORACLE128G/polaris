@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"
+            type="text/javascript"></script>
 
 
     <link rel="stylPayload.Nameesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
@@ -34,19 +35,24 @@
             {{range .Items}}
             <tr>
                 <td><a href="{{.Url}}">{{.PayLoad.Name}}</a></td>
-                {{with .PayLoad}}
-                <td>{{.Gender}}</td>
-                <td>{{.Age}}</td>
-                <td>{{.Height}}cm</td>
-                <td>{{.Weight}}kg</td>
-                <td>{{.Income}}</td>
-                <td>{{.Education}}</td>
-                <td>{{.Occupation}}</td>
-                <td>{{.Hukou}}</td>
-                <td>{{.Xinzuo}}</td>
-                <td>{{.House}}</td>
-                <td>{{.Car}}</td>
-                {{end}}
+            {{with .PayLoad.Entry}}
+            {{if gt (len .) 7}}
+                <td>{{index . 1}}</td>
+                <td>{{index . 2}}</td>
+                <td>{{index . 3}}</td>
+                <td>{{index . 4}}</td>
+                <td>{{index . 5}}</td>
+                <td>{{index . 6}}</td>
+                <td>{{index . 7}}</td>
+            {{else}}
+                <td>{{index . 1}}</td>
+                <td>{{index . 2}}</td>
+                <td>{{index . 3}}</td>
+                <td>{{index . 4}}</td>
+                <td>{{index . 5}}</td>
+                <td>{{index . 6}}</td>
+            {{end}}
+            {{end}}
             </tr>
             {{else}}
             <div>没有找到相关用户</div>
@@ -54,9 +60,9 @@
             </tbody>
         </table>
         <div align="middle">
-            {{if ge .PrevFrom 0}}
+        {{if ge .PrevFrom 0}}
             <a href="search?q={{.Query}}&from={{.PrevFrom}}">上一页</a>
-            {{end}}
+        {{end}}
             <a href="search?q={{.Query}}&from={{.NextFrom}}">下一页</a>
         </div>
     </div>
@@ -65,10 +71,7 @@
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 
 
-
-<script  src="js/index.js"></script>
-
-
+<script src="js/index.js"></script>
 
 
 </body>
