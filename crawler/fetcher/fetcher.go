@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-var rateLimiter = time.Tick(30 * time.Millisecond)
+var rateLimiter = time.Tick(80 * time.Millisecond)
 // Fetch data from url
 func Fetch(url string) ([] byte, error) {
 	<-rateLimiter
@@ -24,10 +24,10 @@ func Fetch(url string) ([] byte, error) {
 		panic(err)
 	}
 	r.Header.Add("User-Agent",
-		"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Mobile Safari/537.36")
+		"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
 	client := http.Client{
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			fmt.Println("Redirect:", req)
+			log.Printf("%s Redirect to %s \n", req.Referer(), req.URL)
 			return nil
 		},
 	}
@@ -37,14 +37,13 @@ func Fetch(url string) ([] byte, error) {
 	}
 	resp, err := http.Get(url)*/
 	if err != nil {
-		log.Printf("error: request failed: %v", err)
 		return nil, err
 	}
 	bodyContents := resp.Body
 	defer bodyContents.Close()
 	if resp.StatusCode != http.StatusOK {
 
-		return nil, fmt.Errorf("wrong status code: %d", resp.StatusCode)
+		return nil, fmt.Errorf("wrong status code: %d \n", resp.StatusCode)
 	}
 	bodyReader := bufio.NewReader(bodyContents)
 	e := determineCharset(bodyReader)
