@@ -36,7 +36,17 @@ func Worker(r Request) (ParseResult, error) {
 	log.Printf("Fetching %s", r.Url)
 	body, err := fetcher.Fetch(r.Url)
 	if err != nil {
-		log.Printf("Fetching: error fetching url %s: %v", r.Url, err)
+		log.Printf("Fetching %s: %v \n", r.Url, err)
+		return ParseResult{}, err
+	}
+	return r.Parser.Parse(body, r.Url), nil
+}
+
+func AnjukeWorker(r Request) (ParseResult, error){
+	log.Printf("Fetching %s", r.Url)
+	body, err := fetcher.AnjukeFetch(r.Url)
+	if err != nil {
+		log.Printf("Fetching %s: %v \n", r.Url, err)
 		return ParseResult{}, err
 	}
 	return r.Parser.Parse(body, r.Url), nil

@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"polaris/crawler-distributed/config"
 	"polaris/crawler/engine"
 	"regexp"
@@ -13,7 +12,6 @@ var cityUrlRe = regexp.MustCompile(
 	`"<a href="https://([.]+).fang.anjuke.com/loupan/([^"])">([.]+)</a>"`)
 
 func ParseCity(contents []byte, _ string) engine.ParseResult {
-	fmt.Println(string(contents))
 	match := profileRe.FindAllSubmatch(contents, -1)
 
 	result := engine.ParseResult{}
