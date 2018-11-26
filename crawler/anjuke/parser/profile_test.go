@@ -13,8 +13,8 @@ func TestNewProfileParser(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	parseResult := NewProfileParser().Parse(&bytes, seed)
-	for r := range parseResult.Items {
+	parseResult := NewProfileParser().Parse(bytes, seed)
+	for _, r := range parseResult.Items {
 		log.Printf("got item %v \n ", r)
 	}
 }
