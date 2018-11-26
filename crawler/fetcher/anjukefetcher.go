@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-var rateLimiterOfAnjuke = time.Tick(1000 * time.Millisecond)
+var rateLimiterOfAnjuke = time.Tick(200 * time.Millisecond)
 // Fetch data from url
 func AnjukeFetch(url string) ([] byte, error) {
 	<-rateLimiterOfAnjuke
