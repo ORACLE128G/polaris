@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-var rateLimiterOfAnjuke = time.Tick(3000 * time.Millisecond)
+var rateLimiterOfAnjuke = time.Tick(1000 * time.Millisecond)
 // Fetch data from url
 func AnjukeFetch(url string) ([] byte, error) {
 	<-rateLimiterOfAnjuke
@@ -20,7 +20,7 @@ func AnjukeFetch(url string) ([] byte, error) {
 	if err != nil {
 		panic(err)
 	}
-	// r.Close = true
+	r.Close = true
 	r.Header.Add("User-Agent",
 		`Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36`)
 
@@ -31,10 +31,6 @@ func AnjukeFetch(url string) ([] byte, error) {
 		},
 	}
 	resp, err := client.Do(r)
-	/*if err != nil{
-		panic(err)
-	}
-	resp, err := http.Get(url)*/
 	if err != nil {
 		return nil, err
 	}

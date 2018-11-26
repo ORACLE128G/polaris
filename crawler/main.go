@@ -14,7 +14,7 @@ const anjukeCityList = "https://www.anjuke.com/sy-city.html"
 
 func main() {
 
-	// unblock the fllowing code, we can got anjuke.com all of pages.
+	// unblock the following code, we can got anjuke.com all of pages.
 	e := engine.ConcurrentEngine{
 		Scheduler:        &scheduler.QueuedScheduler{},
 		WorkerCount:      100,
