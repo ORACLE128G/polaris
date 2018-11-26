@@ -11,6 +11,7 @@ import (
 const seed = "http://www.zhenai.com/zhenghun"
 const shanghai = "http://www.zhenai.com/zhenghun/shanghai"
 const anjukeCityList = "https://www.anjuke.com/sy-city.html"
+const anjukeCity = "https://hhht.fang.anjuke.com/"
 
 func main() {
 
@@ -23,10 +24,10 @@ func main() {
 	}
 
 	e.Run(engine.Request{
-		Url: anjukeCityList,
+		Url: anjukeCity,
 		Parser: engine.NewFuncParser(
 			parser.ParseCityList,
-			config.ParseCityList),
+			config.ParseCity),
 	})
 
 	// for zhenai.com crawler.
