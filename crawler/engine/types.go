@@ -19,6 +19,7 @@ type Item struct {
 	Id      string
 	Type    string
 	PayLoad model.Profile
+	Anjuke  model.AnjukeProfile
 }
 
 type NilParser struct {
