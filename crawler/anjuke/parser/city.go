@@ -20,7 +20,7 @@ func ParseCity(contents []byte, _ string) engine.ParseResult {
 		//name := string(m[2])
 		result.Requests = append(result.Requests, engine.Request{
 			Url:    url,
-			//Parser: NewProfileParser(name),
+			Parser: NewProfileParser(),
 		})
 	}
 	match = cityUrlRe.FindAllSubmatch(contents, -1)
