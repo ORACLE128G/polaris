@@ -48,11 +48,11 @@ func (c *Connection) WriteMsg(out []byte) error {
 
 func (c *Connection) Close() error {
 	c.lock.Lock()
+	defer c.lock.Unlock()
 	if !c.Closed {
 		close(c.CloseChan)
 		c.Closed = true
 	}
-	c.lock.Unlock()
 	return c.Conn.Close()
 }
 
