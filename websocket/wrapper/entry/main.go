@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gorilla/websocket"
 	"net/http"
-	"polaris/websocket/warpper"
+	"polaris/websocket/wrapper"
 	"time"
 )
 
