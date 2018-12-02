@@ -5,33 +5,27 @@
     <title>Websocket testing page.</title>
 
     <script type="text/javascript">
-        function WebSocketTest() {
-            if ("WebSocket" in window) {
-                alert("Your web browser was support WebSocket!");
+        const ws = new WebSocket("ws://localhost:8080/ws");
+        ws.onopen = function () {
 
-                // open connect of web socket
-                var ws = new WebSocket("ws://localhost:8080/ws");
+        };
+        ws.onmessage = function (evt) {
+            var received_msg = evt.data;
+            let label = document.createElement("label");
+            label.innerText += (received_msg + "\n");
+            document.getElementById("msg").appendChild(label)
+            // alert("received data：" + received_msg);
+        };
+        ws.onclose = function () {
+            // close web socket
+            alert("connection closed...");
+        };
 
-                ws.onopen = function () {
-                    // Web Socket connected
-                    let msg = prompt("typing your messages")
-                    ws.send(msg);
-                    alert("sending data...");
-                };
 
-                ws.onmessage = function (evt) {
-                    var received_msg = evt.data;
-                    alert("received data：" + received_msg);
-                };
-
-                ws.onclose = function () {
-                    // close web socket
-                    alert("connection closed...");
-                };
-            }
-
-            else {
-                alert("Your web browser was not support WebSocket!");
+        function send() {
+            let v = document.getElementById("data").value;
+            if (v != null) {
+                ws.send(v)
             }
         }
     </script>
@@ -40,7 +34,12 @@
 <body>
 
 <div id="sse">
-    <a href="javascript:WebSocketTest()">Run WebSocket</a>
+    <input id="data">
+    <a href="javascript:send()">Send Data</a>
+</div>
+
+<div id="msg">
+
 </div>
 
 </body>
