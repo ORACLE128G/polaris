@@ -2,17 +2,18 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"polaris/concurrencypipeline/pipeline"
+	"polaris/concurrencypipeline/rw"
 )
+
 
 func main() {
 	// Run ../main.go first.
 	// Then to run here.
 	p := createPipeline("large.in", 800000000, 4)
-	writeToFile(p, "large.out")
-	printFile("large.out")
+	rw.WriteToFile(p, "large.out")
+	rw.PrintFile("large.out")
 
 	// Before enable the buffer for Reader
 
@@ -42,39 +43,7 @@ func main() {
 	//2018/12/20 22:21:03 Merge done: 38.3544587s
 	//2018/12/20 22:21:03 Merge done: 38.3554571s
 }
-func printFile(filename string) {
-	file, err := os.Open(filename)
-	if err != nil {
-		panic(err)
-	}
 
-	defer file.Close()
-
-	p := pipeline.ReaderSource(file, -1)
-	count := 0
-	for v := range p {
-		fmt.Println(v)
-		if count == 100 {
-			break
-		}
-		count++
-	}
-}
-func writeToFile(p <-chan int, filename string) {
-	file, err := os.Create(filename)
-	if err != nil {
-		panic(err)
-	}
-
-	defer file.Close()
-
-	writer := bufio.NewWriter(file)
-
-	defer writer.Flush()
-
-	pipeline.WriteSink(writer, p)
-
-}
 func createPipeline(fileName string,
 	fileSize, chunkCount int) <-chan int {
 	chunkSize := fileSize / chunkCount
@@ -95,3 +64,5 @@ func createPipeline(fileName string,
 
 	return pipeline.MergeN(sortResult...)
 }
+
+
