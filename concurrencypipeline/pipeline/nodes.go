@@ -1,12 +1,19 @@
-package pipline
+package pipeline
 
 import (
 	"encoding/binary"
 	"io"
+	"log"
 	"math/rand"
 	"sort"
+	"time"
 )
 
+var startTime time.Time
+
+func Init() {
+	startTime = time.Now()
+}
 func ArraySource(ints ... int) <-chan int {
 
 	out := make(chan int, len(ints))
@@ -27,8 +34,11 @@ func InMemSort(in <-chan int) <-chan int {
 		for v := range in {
 			all = append(all, v)
 		}
+		log.Printf("Read done: %v \n", time.Now().Sub(startTime))
 		// Sort
 		sort.Ints(all)
+		log.Printf("InMemSort done: %v \n", time.Now().Sub(startTime))
+
 		// Output
 		for _, v := range all {
 			out <- v
@@ -56,6 +66,7 @@ func Merge(in1, in2 <-chan int) <-chan int {
 			}
 		}
 		close(out)
+		log.Printf("Merge done: %v \n", time.Now().Sub(startTime))
 	}()
 	return out
 }
@@ -89,7 +100,7 @@ func ReaderSource(reader io.Reader, chunkSize int) <-chan int {
 			}
 
 			if err != nil ||
-				(chunkSize != -1 && bytesRead > chunkSize) {
+				(chunkSize != -1 && bytesRead >= chunkSize) {
 				break
 			}
 		}
