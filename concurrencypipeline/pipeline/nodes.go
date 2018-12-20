@@ -11,6 +11,8 @@ import (
 
 var startTime time.Time
 
+const blockSize = 2048
+
 func Init() {
 	startTime = time.Now()
 }
@@ -28,7 +30,7 @@ func ArraySource(ints ... int) <-chan int {
 }
 
 func InMemSort(in <-chan int) <-chan int {
-	out := make(chan int)
+	out := make(chan int, blockSize)
 	go func() {
 		var all []int
 		for v := range in {
@@ -49,7 +51,7 @@ func InMemSort(in <-chan int) <-chan int {
 }
 
 func Merge(in1, in2 <-chan int) <-chan int {
-	out := make(chan int)
+	out := make(chan int, blockSize)
 	go func() {
 		v1, ok1 := <-in1
 		v2, ok2 := <-in2
@@ -84,7 +86,7 @@ func MergeN(inputs ...<-chan int) <-chan int {
 }
 
 func ReaderSource(reader io.Reader, chunkSize int) <-chan int {
-	out := make(chan int)
+	out := make(chan int, blockSize)
 	go func() {
 		// 1byte = 8bit
 		// 1int = 8byte = 64bit
