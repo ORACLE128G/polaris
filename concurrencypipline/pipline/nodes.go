@@ -60,22 +60,36 @@ func Merge(in1, in2 <-chan int) <-chan int {
 	return out
 }
 
-func ReaderSource(reader io.Reader) <-chan int {
+func MergeN(inputs ...<-chan int) <-chan int {
+	if len(inputs) == 1 {
+		return inputs[0]
+	}
+
+	mid := len(inputs) / 2
+	return Merge(
+		MergeN(inputs[:mid]...),
+		MergeN(inputs[mid:]...),
+	)
+}
+
+func ReaderSource(reader io.Reader, chunkSize int) <-chan int {
 	out := make(chan int)
 	go func() {
 		// 1byte = 8bit
 		// 1int = 8byte = 64bit
 		b := make([] byte, 8)
-
+		bytesRead := 0
 		for {
 			n, err := reader.Read(b)
+			bytesRead += n
 			if n > 0 {
 				// transform b to Uint64
 				v := int(binary.BigEndian.Uint64(b))
 				out <- v
 			}
 
-			if err != nil {
+			if err != nil ||
+				(chunkSize != -1 && bytesRead > chunkSize) {
 				break
 			}
 		}

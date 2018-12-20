@@ -31,7 +31,7 @@ func main() {
 	}
 	defer file.Close()
 
-	p = pipline.ReaderSource(bufio.NewReader(file))
+	p = pipline.ReaderSource(bufio.NewReader(file), -1)
 
 	count := 0
 	for v := range p {
