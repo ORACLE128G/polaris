@@ -8,11 +8,11 @@ import (
 // reverse integer
 // see: // see:https://leetcode.com/problems/reverse-integer/
 func main() {
-	println(reverse(123456789234567))
+	println(reverse(1534236469))
 }
 
 func reverse(x int) int {
-	if x == 0 {
+	if x == 0 || x > 2147483647 || x < -2147483647 {
 		return 0
 	}
 
@@ -27,12 +27,16 @@ func reverse(x int) int {
 	for {
 		pop := abs % 10
 		abs /= 10
-		if pop == 0 {
+		if abs == 0 && pop == 0 {
 			break
 		}
 		s += strconv.Itoa(pop)
 	}
 	i, _ := strconv.Atoi(s)
 
-	return i * pi
+	r := i * pi
+	if r > 2147483647 || r < -2147483647 {
+		return 0
+	}
+	return r
 }
